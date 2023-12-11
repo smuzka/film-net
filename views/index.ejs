@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Film-net</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+    <h1>Film-net</h1>
+
+    <!-- Formularz Użytkownika -->
+    <form action="/addUser" method="post">
+        <input type="text" name="username" placeholder="Nazwa Użytkownika">
+        <input type="email" name="email" placeholder="Email">
+        <button type="submit">Dodaj Użytkownika</button>
+    </form>
+
+    <!-- Formularz Filmu -->
+    <form action="/addMovie" method="post">
+        <input type="text" name="title" placeholder="Tytuł Filmu" required>
+        <input type="number" name="year" placeholder="Rok Wydania" required>
+        <input type="text" name="genre" placeholder="Gatunek" required>
+        <button type="submit">Dodaj Film</button>
+    </form>
+    <!-- Formularz Oceny -->
+    <form action="/addRating" method="post">
+        <input type="text" name="username" placeholder="Nazwa Użytkownika">
+        <input type="text" name="title" placeholder="Tytuł Filmu">
+        <input type="number" name="rating" placeholder="Ocena">
+        <button type="submit">Dodaj Oceny</button>
+    </form>
+
+    <!-- Tabela filmów -->
+    <h2>Filmy</h2>
+    <table>
+        <tr>
+            <th>Tytuł</th>
+            <th>Rok Wydania</th>
+            <th>Gatunek</th>
+        </tr>
+        <% filmy.forEach(function(film) { %>
+            <tr>
+                <td><%= film.tytul %></td>
+                <td><%= film.rokWydania %></td>
+                <td><%= film.gatunek %></td>
+            </tr>
+        <% }) %>
+    </table>
+
+    <!-- Tabela ocen użytkowników -->
+    <h2>Oceny Użytkowników</h2>
+    <table>
+        <tr>
+            <th>Nazwa Użytkownika</th>
+            <th>Tytuł Filmu</th>
+            <th>Ocena</th>
+        </tr>
+        <% uzytkownicyIOceny.forEach(function(wpis) { %>
+            <tr>
+                <td><%= wpis.nazwaUzytkownika %></td>
+                <td><%= wpis.tytulFilmu %></td>
+                <td><%= wpis.ocena %></td>
+            </tr>
+        <% }) %>
+    </table>
+</body>
+</html>
