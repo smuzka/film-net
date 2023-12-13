@@ -16,18 +16,20 @@ app.use(express.static('public'));
 // Ścieżki
 app.get('/', async (req, res) => {
     try {
-        const filmy = await session.run('MATCH (f:Film) RETURN f');
-        const uzytkownicyIOceny = await session.run(`
-            MATCH (u:Uzytkownik)-[r:OCENIA]->(f:Film)
-            RETURN u.nazwaUzytkownika, f.tytul, r.ocena
+        const films = await session.run('MATCH (f:Film) RETURN f');
+        const users = await session.run('MATCH (f:User) RETURN f');
+        const userRatings = await session.run(`
+            MATCH (u:User)-[r:Rate]->(f:Film)
+            RETURN u.userName, f.title, r.rating
         `);
 
         res.render('index', {
-            filmy: filmy.records.map(record => record.get('f').properties),
-            uzytkownicyIOceny: uzytkownicyIOceny.records.map(record => ({
-                nazwaUzytkownika: record.get('u.nazwaUzytkownika'),
-                tytulFilmu: record.get('f.tytul'),
-                ocena: record.get('r.ocena')
+            films: films.records.map(record => record.get('f').properties),
+            users: users.records.map(record => record.get('f').properties),
+            userRatings: userRatings.records.map(record => ({
+                userName: record.get('u.userName'),
+                title: record.get('f.title'),
+                rating: record.get('r.rating')
             }))
         });
     } catch (error) {
@@ -45,7 +47,7 @@ app.listen(3000, () => {
 // Obsługa dodawania użytkownika
 app.post('/addUser', (req, res) => {
     const { username, email } = req.body;
-    session.run('CREATE (u:Uzytkownik {nazwaUzytkownika: $username, email: $email}) RETURN u', { username, email })
+    session.run('CREATE (u:User {userName: $username, email: $email}) RETURN u', { username, email })
            .then(() => res.redirect('/'))
            .catch(error => console.error(error));
 });
@@ -53,7 +55,7 @@ app.post('/addUser', (req, res) => {
 // Obsługa dodawania filmu
 app.post('/addMovie', (req, res) => {
     const { title, year, genre } = req.body;
-    const query = 'CREATE (f:Film {tytul: $title, rokWydania: $year, gatunek: $genre}) RETURN f';
+    const query = 'CREATE (f:Film {title: $title, year: $year, category: $genre}) RETURN f';
 
     session.run(query, {
         title,
@@ -71,9 +73,9 @@ app.post('/addMovie', (req, res) => {
 app.post('/addRating', (req, res) => {
     const { username, title, rating } = req.body;
     const query = `
-        MATCH (u:Uzytkownik {nazwaUzytkownika: $username}), 
-              (f:Film {tytul: $title})
-        CREATE (u)-[:OCENIA {ocena: $rating, dataOceny: date()}]->(f)
+        MATCH (u:User {userName: $username}), 
+              (f:Film {title: $title})
+        CREATE (u)-[:Rate {rating: $rating, ratingDate: date()}]->(f)
         RETURN u, f`;
 
     session.run(query, { username, title, rating: parseInt(rating) })

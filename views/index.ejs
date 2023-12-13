@@ -37,11 +37,26 @@
             <th>Rok Wydania</th>
             <th>Gatunek</th>
         </tr>
-        <% filmy.forEach(function(film) { %>
+        <% films.forEach(function(film) { %>
             <tr>
-                <td><%= film.tytul %></td>
-                <td><%= film.rokWydania %></td>
-                <td><%= film.gatunek %></td>
+                <td><%= film.title %></td>
+                <td><%= film.year %></td>
+                <td><%= film.category %></td>
+            </tr>
+        <% }) %>
+    </table>
+
+    <!-- Tabela filmów -->
+    <h2>Użytkownicy</h2>
+    <table>
+        <tr>
+            <th>Nazwa użytkownika</th>
+            <th>Email</th>
+        </tr>
+        <% users.forEach(function(user) { %>
+            <tr>
+                <td><%= user.userName %></td>
+                <td><%= user.email %></td>
             </tr>
         <% }) %>
     </table>
@@ -54,11 +69,11 @@
             <th>Tytuł Filmu</th>
             <th>Ocena</th>
         </tr>
-        <% uzytkownicyIOceny.forEach(function(wpis) { %>
+        <% userRatings.forEach(function(rating) { %>
             <tr>
-                <td><%= wpis.nazwaUzytkownika %></td>
-                <td><%= wpis.tytulFilmu %></td>
-                <td><%= wpis.ocena %></td>
+                <td><%= rating.userName %></td>
+                <td><%= rating.title %></td>
+                <td><%= rating.rating %></td>
             </tr>
         <% }) %>
     </table>
