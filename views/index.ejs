@@ -6,28 +6,29 @@
 </head>
 <body>
     <h1>Film-net</h1>
+    <div class="container">
+        <!-- Formularz Użytkownika -->
+        <form action="/addUser" method="post" class="form">
+            <input type="text" name="username" placeholder="Nazwa Użytkownika">
+            <input type="email" name="email" placeholder="Email">
+            <button type="submit">Dodaj Użytkownika</button>
+        </form>
 
-    <!-- Formularz Użytkownika -->
-    <form action="/addUser" method="post">
-        <input type="text" name="username" placeholder="Nazwa Użytkownika">
-        <input type="email" name="email" placeholder="Email">
-        <button type="submit">Dodaj Użytkownika</button>
-    </form>
-
-    <!-- Formularz Filmu -->
-    <form action="/addMovie" method="post">
-        <input type="text" name="title" placeholder="Tytuł Filmu" required>
-        <input type="number" name="year" placeholder="Rok Wydania" required>
-        <input type="text" name="genre" placeholder="Gatunek" required>
-        <button type="submit">Dodaj Film</button>
-    </form>
-    <!-- Formularz Oceny -->
-    <form action="/addRating" method="post">
-        <input type="text" name="username" placeholder="Nazwa Użytkownika">
-        <input type="text" name="title" placeholder="Tytuł Filmu">
-        <input type="number" name="rating" placeholder="Ocena">
-        <button type="submit">Dodaj Oceny</button>
-    </form>
+        <!-- Formularz Filmu -->
+        <form action="/addMovie" method="post" class="form">
+            <input type="text" name="title" placeholder="Tytuł Filmu" required>
+            <input type="number" name="year" placeholder="Rok Wydania" required>
+            <input type="text" name="genre" placeholder="Gatunek" required>
+            <button type="submit">Dodaj Film</button>
+        </form>
+        <!-- Formularz Oceny -->
+        <form action="/addRating" method="post" class="form">
+            <input type="text" name="username" placeholder="Nazwa Użytkownika">
+            <input type="text" name="title" placeholder="Tytuł Filmu">
+            <input type="number" name="rating" placeholder="Ocena">
+            <button type="submit">Dodaj Oceny</button>
+        </form>
+    </div>
 
     <!-- films table -->
     <h2>Filmy</h2>
@@ -46,7 +47,7 @@
                 <td>
                     <form action="/deleteMovie" method="post">
                         <input type="hidden" name="movieId" value="<%= film.id %>">
-                        <button type="submit">Usuń</button>
+                        <button type="submit" class="delete">Usuń</button>
                     </form>
                 </td>
             </tr>
@@ -68,7 +69,7 @@
                 <td>
                     <form action="/deleteUser" method="post">
                         <input type="hidden" name="userId" value="<%= user.id %>">
-                        <button type="submit">Usuń</button>
+                        <button type="submit" class="delete">Usuń</button>
                     </form>
                 </td>
             </tr>
@@ -92,7 +93,7 @@
                 <td>
                     <form action="/deleteRating" method="post">
                         <input type="hidden" name="ratingId" value="<%= rating.ratingId %>">
-                        <button type="submit">Usuń</button>
+                        <button type="submit" class="delete">Usuń</button>
                     </form>
                 </td>
             </tr>
