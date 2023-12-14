@@ -13,13 +13,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-// const port = process.env.PORT || 3000;
-// app.listen(port, "0.0.0.0", function () {
-//     console.log('Serwer działa');
-// });
-
-app.listen(3000, () => {
-    console.log('Serwer działa na porcie 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, "0.0.0.0", function () {
+    console.log('Serwer działa');
 });
 
 // Ścieżki
