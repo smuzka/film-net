@@ -13,24 +13,46 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
+// const port = process.env.PORT || 3000;
+// app.listen(port, "0.0.0.0", function () {
+//     console.log('Serwer działa');
+// });
+
+app.listen(3000, () => {
+    console.log('Serwer działa na porcie 3000');
+});
+
 // Ścieżki
 app.get('/', async (req, res) => {
     try {
-        const films = await session.run('MATCH (f:Film) RETURN f');
-        const users = await session.run('MATCH (f:User) RETURN f');
+        const films = await session.run('MATCH (f:Film) RETURN f, ID(f)');
+        const users = await session.run('MATCH (u:User) RETURN u, ID(u)');
         const userRatings = await session.run(`
             MATCH (u:User)-[r:Rate]->(f:Film)
-            RETURN u.userName, f.title, r.rating
+            RETURN u.userName, f.title, r.rating, ID(r)
         `);
 
         res.render('index', {
-            films: films.records.map(record => record.get('f').properties),
-            users: users.records.map(record => record.get('f').properties),
-            userRatings: userRatings.records.map(record => ({
-                userName: record.get('u.userName'),
-                title: record.get('f.title'),
-                rating: record.get('r.rating')
-            }))
+            films: films.records.map(record => {
+                return {
+                    id: record.get("ID(f)"),
+                    properties: record.get("f").properties,
+                }
+            }),
+            users: users.records.map(record => {
+                return {
+                    id: record.get("ID(u)"),
+                    properties: record.get("u").properties,
+                }
+            }),
+            userRatings: userRatings.records.map(record => {
+                return {
+                    userName: record.get('u.userName'),
+                    title: record.get('f.title'),
+                    rating: record.get('r.rating'),
+                    ratingId: record.get('ID(r)'),
+                }
+            }),
         });
     } catch (error) {
         console.error('Błąd przy pobieraniu danych:', error);
@@ -38,11 +60,6 @@ app.get('/', async (req, res) => {
     }
 });
 
-
-const port = process.env.PORT || 3000;
-app.listen(port, "0.0.0.0", function () {
-    console.log('Serwer działa');
-});
 
 // ... Obsługa formularzy ...
 
@@ -85,3 +102,32 @@ app.post('/addRating', (req, res) => {
            .catch(error => console.error(error));
 });
 
+app.post('/deleteMovie', (req, res) => {
+    const movieId = req.body.movieId;
+    session.run(`MATCH (f:Film) WHERE ID(f) = ${ parseInt(movieId) } DETACH DELETE f`)
+           .then(() => res.redirect('/'))
+           .catch(error => {
+               console.error('Błąd przy usuwaniu filmu:', error);
+               res.status(500).send('Błąd serwera');
+           });
+});
+
+app.post('/deleteUser', (req, res) => {
+    const userId = req.body.userId;
+    session.run(`MATCH (u:User) WHERE ID(u) = ${ parseInt(userId) } DETACH DELETE u`)
+           .then(() => res.redirect('/'))
+           .catch(error => {
+               console.error('Błąd przy usuwaniu użytkownika:', error);
+               res.status(500).send('Błąd serwera');
+           });
+});
+
+app.post('/deleteRating', (req, res) => {
+    const ratingId = req.body.ratingId;
+    session.run(`MATCH ()-[r]-() WHERE ID(r) = ${ ratingId } DELETE r`)
+           .then(() => res.redirect('/'))
+           .catch(error => {
+               console.error('Błąd przy usuwaniu oceny:', error);
+               res.status(500).send('Błąd serwera');
+           });
+});

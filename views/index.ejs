@@ -29,51 +29,72 @@
         <button type="submit">Dodaj Oceny</button>
     </form>
 
-    <!-- Tabela filmów -->
+    <!-- films table -->
     <h2>Filmy</h2>
     <table>
         <tr>
             <th>Tytuł</th>
             <th>Rok Wydania</th>
             <th>Gatunek</th>
+            <th>Akcje</th>
         </tr>
         <% films.forEach(function(film) { %>
             <tr>
-                <td><%= film.title %></td>
-                <td><%= film.year %></td>
-                <td><%= film.category %></td>
+                <td><%= film.properties.title %></td>
+                <td><%= film.properties.year %></td>
+                <td><%= film.properties.category %></td>
+                <td>
+                    <form action="/deleteMovie" method="post">
+                        <input type="hidden" name="movieId" value="<%= film.id %>">
+                        <button type="submit">Usuń</button>
+                    </form>
+                </td>
             </tr>
         <% }) %>
     </table>
 
-    <!-- Tabela filmów -->
+    <!-- user table -->
     <h2>Użytkownicy</h2>
     <table>
         <tr>
             <th>Nazwa użytkownika</th>
             <th>Email</th>
+            <th>Akcje</th>
         </tr>
         <% users.forEach(function(user) { %>
             <tr>
-                <td><%= user.userName %></td>
-                <td><%= user.email %></td>
+                <td><%= user.properties.userName %></td>
+                <td><%= user.properties.email %></td>
+                <td>
+                    <form action="/deleteUser" method="post">
+                        <input type="hidden" name="userId" value="<%= user.id %>">
+                        <button type="submit">Usuń</button>
+                    </form>
+                </td>
             </tr>
         <% }) %>
     </table>
 
-    <!-- Tabela ocen użytkowników -->
+    <!-- rating table -->
     <h2>Oceny Użytkowników</h2>
     <table>
         <tr>
             <th>Nazwa Użytkownika</th>
             <th>Tytuł Filmu</th>
             <th>Ocena</th>
+            <th>Akcje</th>
         </tr>
         <% userRatings.forEach(function(rating) { %>
             <tr>
                 <td><%= rating.userName %></td>
                 <td><%= rating.title %></td>
                 <td><%= rating.rating %></td>
+                <td>
+                    <form action="/deleteRating" method="post">
+                        <input type="hidden" name="ratingId" value="<%= rating.ratingId %>">
+                        <button type="submit">Usuń</button>
+                    </form>
+                </td>
             </tr>
         <% }) %>
     </table>
