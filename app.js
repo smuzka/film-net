@@ -5,7 +5,7 @@ const neo4j = require('neo4j-driver');
 const app = express();
 
 // Konfiguracja połączenia z Neo4j
-const driver = neo4j.driver('neo4j+s://8a98a84a.databases.neo4j.io', neo4j.auth.basic('neo4j', 'UFOKbg3GfON7t1qg8_d1q41HMoiYODAaOBVUftrbAxM'));
+const driver = neo4j.driver(process.env.NEO_HOST, neo4j.auth.basic(process.env.NEO_USERNAME, process.env.NEO_PASSWORD));
 const session = driver.session();
 
 // Middleware
